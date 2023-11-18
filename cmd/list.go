@@ -1,13 +1,8 @@
 package cmd
 
 import (
-	"os"
-	"path"
-
-	"github.com/Hayao0819/ayaka/conf"
-	srcinfo "github.com/Morganamilo/go-srcinfo"
+	"github.com/Hayao0819/ayaka/repo"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 func listCmd() *cobra.Command {
@@ -20,21 +15,13 @@ func listCmd() *cobra.Command {
 			return nil
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
-			repodir := viper.GetString("repodir")
-			repoconfig := new(conf.RepoConf)
-			if err := conf.LoadRepoConfig(repodir, repoconfig); err != nil {
-				return err
-			}
-
-			dirs, err := os.ReadDir(repodir)
+			repo, err := repo.Get()
 			if err != nil {
 				return err
 			}
-			for _, dir := range dirs {
-				if dir.IsDir() {
-					info, _ := srcinfo.ParseFile(path.Join(repodir, dir.Name(), ".SRCINFO"))
-					cmd.Println(info.Pkgbase)
-				}
+
+			for _, pkg := range repo.Pkgs {
+				cmd.Println(pkg.Srcinfo.Pkgbase)
 			}
 
 			return nil

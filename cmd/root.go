@@ -19,6 +19,7 @@ func rootCmd() *cobra.Command {
 		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
+	cmd.CompletionOptions.HiddenDefaultCmd = true
 
 	cmd.AddCommand(subCmds...)
 	cmd.PersistentFlags().StringVarP(&conf.AppConfigPath, "config", "c", "", "config file path")
