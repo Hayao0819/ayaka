@@ -16,7 +16,6 @@ func rootCmd() *cobra.Command {
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			return conf.LoadAppConfig(&conf.AppConfig)
 		},
-		SilenceErrors: true,
 		SilenceUsage:  true,
 	}
 	cmd.CompletionOptions.HiddenDefaultCmd = true

@@ -14,10 +14,7 @@ type Repository struct {
 	Pkgs   []*Package
 }
 
-type Package struct {
-	Path    string
-	Srcinfo *srcinfo.Srcinfo
-}
+
 
 func Get() (*Repository, error) {
 	repodir := viper.GetString("repodir")
