@@ -22,7 +22,7 @@ func rootCmd() *cobra.Command {
 
 	cmd.AddCommand(subCmds...)
 	cmd.PersistentFlags().StringVarP(&conf.AppConfigPath, "config", "c", "", "config file path")
-	cmd.PersistentFlags().StringVarP(&conf.RepoDir, "repodir", "r", "", "repository directory")
+	cmd.PersistentFlags().StringVarP(&conf.AppConfig.RepoDir, "repodir", "r", "", "repository directory")
 	viper.BindPFlag("repodir", cmd.PersistentFlags().Lookup("repodir"))
 
 	return &cmd

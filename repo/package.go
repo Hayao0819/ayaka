@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/Hayao0819/ayaka/builder"
+	"github.com/Hayao0819/ayaka/logger"
+	"github.com/Hayao0819/ayaka/utils"
 	"github.com/Morganamilo/go-srcinfo"
 )
 
@@ -14,9 +16,10 @@ type Package struct {
 	Srcinfo *srcinfo.Srcinfo
 }
 
-func (p *Package) Build(method string, target builder.Target) error {
+func (p *Package) Build(method string, target *builder.Target) error {
 	builder := builder.GetBuilder(method)
-	return builder.Build(p.Path, &target)
+	logger.Info("Build %s", p.Path)
+	return builder.Build(p.Path, target)
 }
 
 func (p *Package) GetPkgFilePath() string {
@@ -29,4 +32,10 @@ func (p *Package) GetPkgFilePath() string {
 		return ""
 	}
 	return strings.TrimSpace(stdout.String())
+}
+
+func (p *Package) MovePkgFile(dst string) error {
+	src := p.GetPkgFilePath()
+	logger.Info("Move %s to %s", src, dst)
+	return utils.MoveFile(src, dst)
 }

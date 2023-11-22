@@ -4,7 +4,9 @@ import (
 	"os"
 	"path"
 
+	"github.com/Hayao0819/ayaka/builder"
 	"github.com/Hayao0819/ayaka/conf"
+	"github.com/Hayao0819/ayaka/logger"
 	"github.com/Morganamilo/go-srcinfo"
 	"github.com/spf13/viper"
 )
@@ -14,7 +16,26 @@ type Repository struct {
 	Pkgs   []*Package
 }
 
+func (r *Repository) GetDistDir() string {
+	return path.Join(conf.AppConfig.DistDir, r.Config.Name)
+}
 
+func (r *Repository) Build(t *builder.Target) error {
+	dstdir := path.Join(r.GetDistDir(), t.Arch)
+	if err := os.MkdirAll(dstdir, 0755); err != nil {
+		return err
+	}
+	for _, pkg := range r.Pkgs {
+		if err := pkg.Build("archbuild", t); err != nil {
+			logger.Error(err.Error())
+		}
+
+		if err := pkg.MovePkgFile(dstdir); err != nil {
+			logger.Error(err.Error())
+		}
+	}
+	return nil
+}
 
 func Get() (*Repository, error) {
 	repodir := viper.GetString("repodir")

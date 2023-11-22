@@ -16,18 +16,15 @@ func buildCmd() *cobra.Command {
 				return err
 			}
 
-			for _, pkg := range repo.Pkgs {
-				pkg.Build("archbuild", builder.Target{
-					Arch: "x86_64",
-				})
-			}
-			return nil
+			return repo.Build(&builder.Target{
+				Arch: "x86_64",
+			})
 		},
 	}
 
 	return &cmd
 }
 
-func init(){
+func init() {
 	subCmds = append(subCmds, buildCmd())
 }

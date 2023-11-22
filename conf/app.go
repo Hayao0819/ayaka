@@ -8,10 +8,12 @@ import (
 
 type AppConf struct {
 	RepoDir string `mapstructure:"repodir"`
+	DistDir string `mapstructure:"distdir"`
+	
 }
 
 var AppConfigPath string
-var RepoDir string
+//var RepoDir string
 var AppConfig AppConf
 
 func LoadAppConfig(config *AppConf) error {
