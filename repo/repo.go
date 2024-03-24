@@ -4,9 +4,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/Hayao0819/ayaka/builder"
+	builder "github.com/Hayao0819/ayaka/abs"
 	"github.com/Hayao0819/ayaka/conf"
 	"github.com/Hayao0819/ayaka/logger"
+	blinky_utils "github.com/Hayao0819/ayaka/utils/blinky"
 	"github.com/Morganamilo/go-srcinfo"
 	"github.com/spf13/viper"
 )
@@ -33,8 +34,24 @@ func (r *Repository) Build(t *builder.Target) error {
 		if err := pkg.MovePkgFile(dstdir); err != nil {
 			logger.Error(err.Error())
 		}
+
+		/*
+			if err := r.UploadToBlinky(conf.AppConfig.BlinkyServer, pkg); err != nil {
+				logger.Error(err.Error())
+			}
+		*/
+
 	}
 	return nil
+}
+
+func (r *Repository) UploadToBlinky(server string, pkg *Package) error {
+	client, error := blinky_utils.GetClient(server)
+	if error != nil {
+		return error
+	}
+
+	return client.UploadPackageFiles(r.Config.Name, pkg.GetPkgFilePath())
 }
 
 func Get() (*Repository, error) {

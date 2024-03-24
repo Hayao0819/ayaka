@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strings"
 
-	"github.com/Hayao0819/ayaka/builder"
+	builder "github.com/Hayao0819/ayaka/abs"
 	"github.com/Hayao0819/ayaka/logger"
 	"github.com/Hayao0819/ayaka/utils"
 	"github.com/Morganamilo/go-srcinfo"
@@ -38,4 +38,8 @@ func (p *Package) MovePkgFile(dst string) error {
 	src := p.GetPkgFilePath()
 	logger.Info("Move %s to %s", src, dst)
 	return utils.MoveFile(src, dst)
+}
+
+func (p *Package) UploadToBlinky(server string, repo *Repository) error {
+	return repo.UploadToBlinky(server, p)
 }

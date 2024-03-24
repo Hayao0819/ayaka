@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"github.com/Hayao0819/ayaka/builder"
+	"github.com/Hayao0819/ayaka/abs"
 	"github.com/Hayao0819/ayaka/repo"
 	"github.com/spf13/cobra"
 )
@@ -15,10 +15,11 @@ func buildCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			return repo.Build(&builder.Target{
+			builder := abs.Target{
 				Arch: "x86_64",
-			})
+			}
+
+			return repo.Build(&builder)
 		},
 	}
 
