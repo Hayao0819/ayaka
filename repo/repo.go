@@ -7,7 +7,6 @@ import (
 	builder "github.com/Hayao0819/ayaka/abs"
 	"github.com/Hayao0819/ayaka/conf"
 	"github.com/Hayao0819/ayaka/logger"
-	blinky_utils "github.com/Hayao0819/ayaka/utils/blinky"
 	"github.com/Morganamilo/go-srcinfo"
 	"github.com/spf13/viper"
 )
@@ -45,13 +44,13 @@ func (r *Repository) Build(t *builder.Target) error {
 	return nil
 }
 
-func (r *Repository) UploadToBlinky(server string, pkg *Package) error {
-	client, error := blinky_utils.GetClient(server)
-	if error != nil {
-		return error
+func (r *Repository) UploadAllPackageToBlinky(server string) error {
+	for _, pkg := range r.Pkgs {
+		if err := pkg.UploadToBlinky(server, r); err != nil {
+			return err
+		}
 	}
-
-	return client.UploadPackageFiles(r.Config.Name, pkg.GetPkgFilePath())
+	return nil
 }
 
 func Get() (*Repository, error) {

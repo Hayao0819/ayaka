@@ -8,6 +8,7 @@ import (
 	builder "github.com/Hayao0819/ayaka/abs"
 	"github.com/Hayao0819/ayaka/logger"
 	"github.com/Hayao0819/ayaka/utils"
+	blinky_utils "github.com/Hayao0819/ayaka/utils/blinky"
 	"github.com/Morganamilo/go-srcinfo"
 )
 
@@ -41,5 +42,10 @@ func (p *Package) MovePkgFile(dst string) error {
 }
 
 func (p *Package) UploadToBlinky(server string, repo *Repository) error {
-	return repo.UploadToBlinky(server, p)
+	client, error := blinky_utils.GetClient(server)
+	if error != nil {
+		return error
+	}
+
+	return client.UploadPackageFiles(repo.Config.Name, p.GetPkgFilePath())
 }
